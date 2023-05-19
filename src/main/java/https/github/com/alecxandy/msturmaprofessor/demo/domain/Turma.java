@@ -1,9 +1,6 @@
 package https.github.com.alecxandy.msturmaprofessor.demo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +17,8 @@ public class Turma {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Double capacidade;
+
+    @ManyToOne
+    private Professor professor;
 
 }
