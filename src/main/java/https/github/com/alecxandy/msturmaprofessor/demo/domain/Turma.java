@@ -19,6 +19,7 @@ public class Turma {
     private Double capacidade;
 
     @ManyToOne
+    @JoinColumn(name = "professor_id")
     private Professor professor;
 
 }

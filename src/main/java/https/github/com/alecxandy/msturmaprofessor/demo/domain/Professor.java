@@ -19,6 +19,6 @@ public class Professor {
     private String nome;
     private String telefone;
 
-    @OneToMany
+    @OneToMany(mappedBy = "professor")
     private List<Turma> turmaList;
 }
