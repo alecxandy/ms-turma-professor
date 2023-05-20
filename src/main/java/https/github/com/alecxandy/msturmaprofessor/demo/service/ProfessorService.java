@@ -2,15 +2,20 @@ package https.github.com.alecxandy.msturmaprofessor.demo.service;
 
 import https.github.com.alecxandy.msturmaprofessor.demo.domain.Professor;
 import https.github.com.alecxandy.msturmaprofessor.demo.repository.ProfessorRepository;
+import https.github.com.alecxandy.msturmaprofessor.demo.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProfessorService {
 
     @Autowired
     private ProfessorRepository professorRepository;
+    @Autowired
+    private TurmaService turmaService;
 
     public Professor save(Professor professor) {
         return professorRepository.save(professor);
@@ -21,11 +26,16 @@ public class ProfessorService {
     }
 
     public Optional<Professor> findById(Long id) {
-        return professorRepository.findById(id);
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id is not exists"));
+        return Optional.of(professor);
     }
 
     public void DeleteById(Long id) {
-        professorRepository.deleteById(id);
+        professorRepository.findById(id).map(professor -> {
+            professorRepository.deleteById(professor.getId());
+            return professor;
+        }).orElseThrow(() -> new RuntimeException("id is not exists"));
     }
 
 }

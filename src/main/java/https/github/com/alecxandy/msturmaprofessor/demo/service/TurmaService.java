@@ -1,6 +1,9 @@
 package https.github.com.alecxandy.msturmaprofessor.demo.service;
 
+import https.github.com.alecxandy.msturmaprofessor.demo.domain.Professor;
 import https.github.com.alecxandy.msturmaprofessor.demo.domain.Turma;
+import https.github.com.alecxandy.msturmaprofessor.demo.domain.dto.TurmaRequestDTO;
+import https.github.com.alecxandy.msturmaprofessor.demo.repository.ProfessorRepository;
 import https.github.com.alecxandy.msturmaprofessor.demo.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,15 @@ public class TurmaService {
     @Autowired
     private TurmaRepository turmaRepository;
 
-    public Turma save(Turma turma) {
+    @Autowired
+    private ProfessorRepository professorRepository;
+
+    public Turma save(TurmaRequestDTO turmaRequestDTO) {
+        Professor professor = professorRepository.findById(turmaRequestDTO.getProfessorId())
+                .orElseThrow(() -> new RuntimeException("notnull"));
+        Turma turma = new Turma();
+        turma.setCapacidade(turmaRequestDTO.getCapacidade());
+        turma.setProfessor(professor);
         return turmaRepository.save(turma);
     }
 
@@ -23,11 +34,17 @@ public class TurmaService {
     }
 
     public Optional<Turma> findById(Long id) {
-        return turmaRepository.findById(id);
+        Turma turma = turmaRepository.findById(id).orElseThrow(() -> new RuntimeException("notnull"));
+        return Optional.of(turma);
     }
 
     public void deleteById(Long id) {
-        turmaRepository.deleteById(id);
+        turmaRepository.findById(id).map(turma -> {
+            turma.setProfessor(null);
+            turmaRepository.save(turma);
+            turmaRepository.deleteById(turma.getId());
+            return turma;
+        }).orElseThrow(() -> new RuntimeException("notnull"));
     }
 
 

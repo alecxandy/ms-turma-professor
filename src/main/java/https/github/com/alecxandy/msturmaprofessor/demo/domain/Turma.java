@@ -1,5 +1,6 @@
 package https.github.com.alecxandy.msturmaprofessor.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Turma {
     private Long id;
     private Double capacidade;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "professor_id")
     private Professor professor;

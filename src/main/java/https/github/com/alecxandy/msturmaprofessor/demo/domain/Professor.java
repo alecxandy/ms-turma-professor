@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +21,11 @@ public class Professor {
     private String nome;
     private String telefone;
 
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "professor")
     private List<Turma> turmaList;
+
+    @PreRemove//setar como null as turmas que tem o professor excluido
+    public void updateTurma() {
+        turmaList.forEach(turma -> turma.setProfessor(null));
+    }
 }
