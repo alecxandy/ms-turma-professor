@@ -13,10 +13,8 @@ import java.util.List;
 
 @Service
 public class TurmaService {
-
     @Autowired
     private TurmaRepository turmaRepository;
-
     @Autowired
     private ProfessorRepository professorRepository;
 
@@ -47,5 +45,16 @@ public class TurmaService {
         }).orElseThrow(() -> new RuntimeException("notnull"));
     }
 
+    public Turma update(TurmaRequestDTO turmaRequestDTO, Long id) {
+        Professor professor = turmaRepository.findById(turmaRequestDTO.getProfessorId())
+                .orElseThrow(() -> new RuntimeException("id is not professor exists")).getProfessor();
+        return turmaRepository.findById(id).map(t -> {
+            t.setId(id);
+            t.setProfessor(professor);
+            t.setCapacidade(turmaRequestDTO.getCapacidade());
+            turmaRepository.save(t);
+            return t;
+        }).orElseThrow(() -> new RuntimeException("id is not exists"));
+    }
 
 }

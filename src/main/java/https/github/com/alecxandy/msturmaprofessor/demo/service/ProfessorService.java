@@ -4,6 +4,8 @@ import https.github.com.alecxandy.msturmaprofessor.demo.domain.Professor;
 import https.github.com.alecxandy.msturmaprofessor.demo.repository.ProfessorRepository;
 import https.github.com.alecxandy.msturmaprofessor.demo.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,4 +40,16 @@ public class ProfessorService {
         }).orElseThrow(() -> new RuntimeException("id is not exists"));
     }
 
+    public Professor update(Professor professor, long id) {
+        return professorRepository.findById(id).map(p -> {
+            p.setId(id);
+            p.setNome(professor.getNome());
+            p.setTelefone(professor.getTelefone());
+            p.setTurmaList(professor.getTurmaList());
+            professorRepository.save(p);
+            return p;
+        }).orElseThrow(() -> new RuntimeException("it is not exists"));
+    }
 }
+
+

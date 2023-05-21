@@ -38,5 +38,10 @@ public class TurmaController {
         turmaService.deleteById(id);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Turma> update(@RequestBody TurmaRequestDTO turmaRequestDTO, @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(turmaService.update(turmaRequestDTO, id));
+    }
+
 
 }

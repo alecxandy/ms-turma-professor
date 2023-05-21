@@ -36,4 +36,11 @@ public class ProfessorController {
     public void deleteById(@PathVariable Long id) {
         professorService.DeleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Professor> update(@RequestBody Professor professor, @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(professorService.update(professor, id));
+    }
+
+
 }
